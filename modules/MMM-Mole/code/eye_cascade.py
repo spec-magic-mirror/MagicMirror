@@ -9,6 +9,7 @@ import os
 import time
 import inspect
 import requests
+import base64
 
 
 # Configuration from MMM
@@ -52,25 +53,33 @@ time.sleep(2)
 to_node('camera_ready', True)
 i = 0
 # track smile time
-
+imgs = []
+imageOrder = ["Front", "Left", "Back", "Right"]
 while True:
   # take a frame every second
   time.sleep(1)
 
   # use VS instead of cv2.VideoCapture
   frame = vs.read()
+  # print(frame)
+  # try:
+  #   gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+  # except:
+  #   to_node('error', sys.exc_info()[0])
+  #   break
 
   try:
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    frame, buf = cv2.imencode(".jpg", frame)
   except:
     to_node('error', sys.exc_info()[0])
     break
-
-
   # TODO: Send images base64 to REST, 
-
-  response = requests.post("http://localhost:5000/detect_moles", files={"image": frame})
-  print(response)
+  
+  # response = requests.post("http://localhost:5000/detect_moles", files={"image": frame})
+  # img.append(frame)
+  response = requests.post("http://localhost:5000/detect_moles", files={"front": base64.b64encode(buf)})
+  
+  
   # cv2.imwrite(log_path + datetime.now().isoformat("T") + '.jpg', frame)
   i += 1
   to_node('success', True)
