@@ -55,9 +55,14 @@ i = 0
 # track smile time
 imgs = []
 imageOrder = ["Front", "Left", "Back", "Right"]
+
+response = requests.get("http://localhost:5000/get_test")
+to_node('backend', response.content)
+
+time.sleep(3)
 while True:
   # take a frame every second
-  time.sleep(1)
+  time.sleep(10)
 
   # use VS instead of cv2.VideoCapture
   frame = vs.read()
@@ -67,20 +72,18 @@ while True:
   # except:
   #   to_node('error', sys.exc_info()[0])
   #   break
-
+  # cv2.imwrite(log_path + datetime.now().isoformat("T") + '.jpg', frame)
   try:
     frame, buf = cv2.imencode(".jpg", frame)
   except:
     to_node('error', sys.exc_info()[0])
     break
+
   # TODO: Send images base64 to REST, 
+  imgs.append(buf)
+
+  # response = requests.post("http://localhost:5000/detect_moles", files={"front": base64.b64encode(buf)})
   
-  # response = requests.post("http://localhost:5000/detect_moles", files={"image": frame})
-  # img.append(frame)
-  response = requests.post("http://localhost:5000/detect_moles", files={"front": base64.b64encode(buf)})
-  
-  
-  # cv2.imwrite(log_path + datetime.now().isoformat("T") + '.jpg', frame)
   i += 1
   to_node('success', True)
 
@@ -149,3 +152,14 @@ while True:
 
 vs.stop()
 cv2.destroyAllWindows()
+
+for i in range(0,4):
+  response = requests.post("http://localhost:5000/detect_moles", files={imageOrder[i]: base64.b64encode(imgs[i])})
+
+
+
+
+
+
+
+

@@ -32,11 +32,13 @@ module.exports = NodeHelper.create({
           self.config['captureAngle'] = 0;
           self.sendSocketNotification('FINISH', 'We are done!! Thanks!!');
         }
-        
       } else if (message.hasOwnProperty('error')) {
         console.log("[" + self.name + "] " + (message.error));
         self.restart = true
           // self.sendSocketNotification('RESULT', message.result);
+      } else if (message.hasOwnProperty('backend')) {
+        console.log("[!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!] " + message.backend)
+        self.sendSocketNotification('BACKEND', message.backend);
       } else {
         console.log("[" + self.name + "] " + message)
       }

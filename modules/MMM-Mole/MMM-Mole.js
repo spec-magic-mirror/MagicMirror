@@ -47,6 +47,9 @@ Module.register("MMM-Mole", {
             })
           }, 5000);
       }
+    } else if (notification === "BACKEND") {
+      this.message = payload;
+      Log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     } else {
       if (payload === "We are done!! Thanks!!") {
         setTimeout(function() {
