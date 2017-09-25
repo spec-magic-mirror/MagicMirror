@@ -10,70 +10,69 @@
 Module.register("MMM-Mole", {
 	defaults: {
 		text: "Hello to Magic Mole Monitor!",
-    captureAngle: 0,
-    usePiCam: false
+    usePiCam: false,
+    display: false
 	},
 
-  start: function() {
-    Log.info('Starting module: ' + this.name);
-    var self = this
-    this.show(1000, function() {
-      Log.log(this.name + ' is shown*********************.');
-    })
-    this.message = 'Starting mole test...'
-    this.getMoleTestResult();
-    
-    // setTimeout(function() {
-    //   self.start()
-    // }, this.config.interval);
-  },
   getMoleTestResult: function() {
-    Log.info("Start mole test.");
+    var self = this;    
+    
+    self.image = null;
+    self.message = "Please stand still while taking the test.";
+    self.display = true;
+    self.updateDom();
+    self.show(function() {
+      Log.log(self.name + ' is shown.');
+    });
 
-    this.pythonStarted = false
+    this.pythonStarted = false;
     this.sendSocketNotification('START_TEST', this.config);
-    this.message = "Time to take pictures~";
   },
 
   socketNotificationReceived: function(notification, payload) {
     var self = this;
+    self.display = true;
     if (notification === "MESSAGE") {
       this.message = payload;
       Log.info(payload);
-      if (payload === "We are done!! Thanks!!") {
-        setTimeout(function() {
-            self.hide(1000, function() {
-              Log.log(self.name + ' is hidden.');
-            })
-          }, 5000);
-      }
     } else if (notification === "BACKEND") {
+      this.image = "data:image/png;base64," + payload;
+    } else if (notification === "FINISH"){
       this.message = payload;
-      Log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    } else {
       if (payload === "We are done!! Thanks!!") {
         setTimeout(function() {
-            self.hide(1000, function() {
-              Log.log(self.name + ' is hidden.');
-            })
-          }, 5000);
+          self.hide(5000, function() {
+            Log.log(self.name + ' is hidden.');
+          })
+        }, 5000);
       }
     }
-    Log.log("payload in mole mapper!!!!", payload);
-
-    // var div = document.createElement("p");
-    // var t = document.createTextNode(payload);
-
     this.updateDom();
+  },
+
+  notificationReceived: function(notification, payload, sender) {
+
+    if (notification === "CHECK_MY_SKIN"){
+      this.getMoleTestResult();
+    }
   },
 
 	getDom: function() {
 		var wrapper = document.createElement("div");
-		wrapper.innerHTML = this.config.text;
-    var h = document.createElement("p");
-    var t = document.createTextNode(this.message);
-    h.appendChild(t);
-    wrapper.appendChild(h);
+    if (this.display) {
+  		wrapper.innerHTML = this.config.text;
+      var message_p = document.createElement("p");
+      var message_text = document.createTextNode(this.message);
+      message_p.appendChild(message_text);
+      wrapper.appendChild(message_p);
+      if (this.image != null) {
+        var imageTab = document.createElement('img');
+        imageTab.setAttribute('src', this.image);
+        imageTab.setAttribute('height', '100%');
+        imageTab.setAttribute('width', '100%');
+        wrapper.appendChild(imageTab);
+      } 
+    }
 		return wrapper;
 	}
 });

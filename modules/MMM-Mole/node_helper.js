@@ -14,26 +14,11 @@ module.exports = NodeHelper.create({
       if (message.hasOwnProperty('camera_ready')) {
         console.log("[" + self.name + "] " + 'camera ready')
         self.sendMessage("Ready to take pictures");
-      } else if (message.hasOwnProperty('success') && self.config['captureAngle'] < 4) {
+      } else if (message.hasOwnProperty('success')) {
         console.log("[" + self.name + "] " + (message.success));
-        if (self.config['captureAngle'] == 0) {
-          self.sendSocketNotification('MESSAGE', 'please turn to the right');
-          self.config['captureAngle'] += 1;
-        } else if (self.config['captureAngle'] == 1) {
-          self.sendSocketNotification('MESSAGE', 'please turn to the back');
-          self.config['captureAngle'] += 1;
-        } else if (self.config['captureAngle'] == 2) {
-          self.sendSocketNotification('MESSAGE', 'please turn to the left');
-          self.config['captureAngle'] += 1;
-        } else if (self.config['captureAngle'] == 3) {
-          self.sendSocketNotification('MESSAGE', 'We are done!! Thanks!!');
-          self.config['captureAngle'] += 1;
-        } else {
-          self.config['captureAngle'] = 0;
-          self.sendSocketNotification('FINISH', 'We are done!! Thanks!!');
-        }
+        self.sendSocketNotification('FINISH', 'We are done!! Thanks!!');
       } else if (message.hasOwnProperty('error')) {
-        console.log("[" + self.name + "] " + (message.error));
+        console.log("[" + self.name + "] " + " Error message: " + (message.error));
         self.restart = true
           // self.sendSocketNotification('RESULT', message.result);
       } else if (message.hasOwnProperty('backend')) {
