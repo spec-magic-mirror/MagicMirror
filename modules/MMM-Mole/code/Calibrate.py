@@ -1,10 +1,9 @@
 import numpy as np
 import cv2
+import dlib
 
 class Calibrate:
 	"""docstring for Calibrate"""
-	
-
 	def __init__(self, fname):
 		self.fname = fname
         # self.eyes_coordinates = np.zeros((2,4))

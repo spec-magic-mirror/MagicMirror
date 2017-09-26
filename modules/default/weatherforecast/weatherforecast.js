@@ -12,8 +12,8 @@ Module.register("weatherforecast",{
 	// Default module config.
 	defaults: {
 		location: false,
-		locationID: false,
-		appid: "",
+		locationID: "5128581",
+		appid: "a60bfdedd987d9ea6b2d19c21a5d4415",
 		units: config.units,
 		maxNumberOfDays: 7,
 		showRainAmount: false,
@@ -29,7 +29,7 @@ Module.register("weatherforecast",{
 
 		apiVersion: "2.5",
 		apiBase: "http://api.openweathermap.org/data/",
-		forecastEndpoint: "forecast/daily",
+		forecastEndpoint: "forecast", //"forecast/daily",
 
 		appendLocationNameToHeader: true,
 		calendarClass: "calendar",
@@ -293,8 +293,8 @@ Module.register("weatherforecast",{
 
 				day: moment(forecast.dt, "X").format("ddd"),
 				icon: this.config.iconTable[forecast.weather[0].icon],
-				maxTemp: this.roundValue(forecast.temp.max),
-				minTemp: this.roundValue(forecast.temp.min),
+				maxTemp: this.roundValue(forecast.main.temp_max),
+				minTemp: this.roundValue(forecast.main.temp_min),
 				rain: this.roundValue(forecast.rain)
 
 			});

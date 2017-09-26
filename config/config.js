@@ -37,6 +37,17 @@ var config = {
 				]
 			}
 		},
+		{
+			module: "weatherforecast",
+			position: "top_right",	// This can be any of the regions.
+			header: 'Weather Forecast',		// Best results in left or right regions.
+			config: {
+				// See 'Configuration options' for more information.
+				location: "New York",
+				locationID: "5128581", //Location ID from http://openweathermap.org/help/city_list.txt
+				appid: "" //openweathermap.org API key.
+			}
+		},
 		// {
 		// 	module: 'compliments',
 		// 	position: 'lower_third'

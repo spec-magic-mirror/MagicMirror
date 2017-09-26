@@ -11,7 +11,6 @@ import inspect
 import requests
 import base64
 
-
 # Configuration from MMM
 CONFIG = json.loads(sys.argv[1])
 
@@ -47,6 +46,10 @@ def to_node(type, message):
 # Start video stream
 # vs = VideoStream(usePiCamera=CONFIG['usePiCam']).start()
 cap = cv2.VideoCapture(0)
+
+# cap.set(CV_CAP_PROP_FRAME_WIDTH,640);
+# cap.set(CV_CAP_PROP_FRAME_HEIGHT,480);
+
 
 # allow the camera sensor to warmup
 time.sleep(2)
