@@ -13,42 +13,24 @@ Module.register("voicecontrol", {
 
     defaults: {
 		models: [
-					{
-						keyword: "Show Camera",
-						description: "Say 'Show Camera' to display camera",
-						file: "showCamera.pmdl",
-						message: "SHOW_CAMERA"
-					},
-					{
-						keyword: "Hide Camera",
-						description: "Say 'Hide Camera' to hide camera",
-						file: "hideCamera.pmdl",
-						message: "HIDE_CAMERA"
-					},
-					{
-						keyword: "Selfie",
-						description: "Say 'Selfie' when camera is visible",
-						file: "selfie.pmdl",
-						message: "SELFIE"
-					},
-                    {
-						keyword: "Show Weather",
-						description: "Say 'Show Weather' to display weather",
-						file: "showWeather.pmdl",
-						message: "SHOW_WEATHER"
-					},
-                    {
-						keyword: "Hide Weather",
-						description: "Say 'Hide Weather' when weather is visible",
-						file: "hideWeather.pmdl",
-						message: "HIDE_WEATHER"
-					},
                     {
                         keyword: "Check My Skin",
                         description: "Say 'Check My Skin' to start your skin test",
                         file: "checkMySkin.pmdl",
                         message: "CHECK_MY_SKIN"
                     },
+                    {
+                        keyword: "Yes",
+                        description: "Say 'Yes' to send your skin test",
+                        file: "YES.pmdl",
+                        message: "YES"
+                    },
+                    {
+                        keyword: "No",
+                        description: "Say 'No' to finish your skin test",
+                        file: "NO.pmdl",
+                        message: "NO"
+                    }
 				]
 	},
     display: false,

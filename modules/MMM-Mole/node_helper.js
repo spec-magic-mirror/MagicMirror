@@ -19,13 +19,12 @@ module.exports = NodeHelper.create({
         self.sendSocketNotification('FINISH', 'We are done!! Thanks!!');
       } else if (message.hasOwnProperty('error')) {
         console.log("[" + self.name + "] " + " Error message: " + (message.error));
-        self.restart = true
-          // self.sendSocketNotification('RESULT', message.result);
+        self.restart = true;
       } else if (message.hasOwnProperty('backend')) {
-        console.log("[!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!] " + message.backend)
+        console.log("[!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!] " + message.backend);
         self.sendSocketNotification('BACKEND', message.backend);
       } else {
-        console.log("[" + self.name + "] " + message)
+        console.log("[" + self.name + "] " + message);
       }
       
     });
@@ -39,20 +38,24 @@ module.exports = NodeHelper.create({
         }, 30 * 1000);
       } else {
         console.log("[" + self.name + "] " + 'finished running...');
+        self.sendMessage('Your next appointment is not for 6 months would you like to send this report to your doctor?');
       }
     });
   },
   sendMessage: function(msg){
-    var self = this
+    var self = this;
     self.sendSocketNotification("MESSAGE", msg);
   },
   socketNotificationReceived: function(notification, payload) {
     if (notification === 'START_TEST') {
       this.config = payload
       this.python_start();
-
-    } else if (notification == "PASSED_TEST") {
-      this.sendMessage('MESSAGE', "PASSED_TEST");
+    } else if (notification === 'PASSED_TEST') {
+      this.sendSocketNotification('MESSAGE', "PASSED_TEST");
+    } else if (notification === 'WELCOME') {
+      this.sendSocketNotification('WELCOME', 'Welcome to Reflective Health!');
+    } else if (notification === 'BYE') {
+      this.sendSocketNotification('BYE', "Goodbye");
     }
   }
 

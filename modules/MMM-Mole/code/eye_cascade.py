@@ -65,10 +65,7 @@ try:
   img, buf = cv2.imencode(".jpg", img)
 except:
   to_node('error', sys.exc_info()[0])
-finally:
-  to_node('success', True)
-
-
+  
 # When everything done, release the capture
 cap.release()
 # vs.stop()
@@ -76,6 +73,10 @@ cv2.destroyAllWindows()
 responses = requests.post("http://localhost:5000/detect_moles", files={"Front": base64.b64encode(buf)})
 
 to_node('backend', responses.json().get('Front'))
+
+time.sleep(5)
+to_node('success', True)
+time.sleep(5)
 
 
 
