@@ -48,6 +48,7 @@ Module.register("MMM-Mole", {
     } else if (notification === 'BYE') {
       var callback = function() {
         self.message = "Goodbye! Next test is in 3 month.";
+        this.testInProgress = false;
         self.image = null;
         self.updateDom();
       }
@@ -72,12 +73,12 @@ Module.register("MMM-Mole", {
       self.testInProgress = true;
       this.updateDom();
       this.sendSocketNotification('START_TEST', this.config);
-    } else if (notification === "YES") {
+    } else if (notification === "YES" && self.testInProgress) {
       self.message = "Your skin test has been send to your doctor.";
       this.updateDom();
 
       this.sendSocketNotification('BYE', this.config);
-    } else if (notification === "NO") {
+    } else if (notification === "NO" && self.testInProgress) {
       this.sendSocketNotification('BYE', this.config);
     }
   },
