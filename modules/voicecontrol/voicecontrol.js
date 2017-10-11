@@ -71,6 +71,7 @@ Module.register("voicecontrol", {
             {
                 this.header_command = document.createElement("header");
                 this.header_command.innerHTML = "Voice Commands";
+                this.header_command.className = "title bright";
                 wrapper.appendChild(this.header_command);
                 var models = this.config.models;
 
@@ -78,7 +79,7 @@ Module.register("voicecontrol", {
                 {
                     this.command_desc = document.createElement("div");
                     this.command_desc.innerHTML = model.description;
-                    this.command_desc.className = "small dimmed top";
+                    this.command_desc.className = "small_medium normal top";
                     wrapper.appendChild(this.command_desc);
                 }, this);
             }

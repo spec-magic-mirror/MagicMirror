@@ -11,7 +11,8 @@ Module.register("MMM-Mole", {
 	defaults: {
 		text: "Welcome to Reflective Health!",
     usePiCam: false,
-    display: true
+    display: true,
+    testInProgress: false
 	},
 
   start: function() {
@@ -68,6 +69,7 @@ Module.register("MMM-Mole", {
       self.image = null;
       self.message = "Please stand still while taking the test.";
       self.display = true;
+      self.testInProgress = true;
       this.updateDom();
       this.sendSocketNotification('START_TEST', this.config);
     } else if (notification === "YES") {
@@ -83,7 +85,10 @@ Module.register("MMM-Mole", {
 	getDom: function() {
 		var wrapper = document.createElement("div");
     if (this.display) {
-  		wrapper.innerHTML = this.config.text;
+      var message_header = document.createElement('h2');
+      var header_text = document.createTextNode(this.config.text);
+      message_header.appendChild(header_text);
+      wrapper.appendChild(message_header);
       var message_p = document.createElement("p");
       var message_text = document.createTextNode(this.message);
       message_p.appendChild(message_text);

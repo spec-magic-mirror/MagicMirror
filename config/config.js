@@ -73,8 +73,9 @@ var config = {
 				text: "Welcome to Reflective Health!",
 				message: "",
 				// use pi camera by default; set it to false for laptop camera
-				usePiCam: false
-				//display: true
+				usePiCam: false,
+				display: true,
+				testInProgress: false
 	    	}
 		},
 		// {
@@ -107,7 +108,7 @@ var config = {
   //       },
         {
 	       module: 'voicecontrol',
-	       position: 'bottom_left',
+	       position: 'top_right',
 	       config: {
 		      models: [
 			     {
