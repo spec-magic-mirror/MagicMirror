@@ -9,24 +9,26 @@
 
 Module.register("MMM-Mole", {
 	defaults: {
-		text: "Hello to Magic Mole Monitor!",
+		text: "Welcome to Reflective Health!",
     usePiCam: false,
-    display: false
+    display: true
 	},
+
+  start: function() {
+    Log.info('Starting module: ' + this.name);
+    var self = this
+    this.show(1000, function() {
+      Log.log(this.name + ' is shown.');
+    });
+    this.message = '';
+    this.image = null;
+    this.getMoleTestResult();   
+  },
 
   getMoleTestResult: function() {
     var self = this;    
-    
-    self.image = null;
-    self.message = "Please stand still while taking the test.";
-    self.display = true;
-    self.updateDom();
-    self.show(function() {
-      Log.log(self.name + ' is shown.');
-    });
-
     this.pythonStarted = false;
-    this.sendSocketNotification('START_TEST', this.config);
+    this.sendSocketNotification('WELCOME', this.config);
   },
 
   socketNotificationReceived: function(notification, payload) {
@@ -34,26 +36,47 @@ Module.register("MMM-Mole", {
     self.display = true;
     if (notification === "MESSAGE") {
       this.message = payload;
-      Log.info(payload);
     } else if (notification === "BACKEND") {
+      this.message = "Great photo! Analyzing...";
       this.image = "data:image/png;base64," + payload;
     } else if (notification === "FINISH"){
       this.message = payload;
-      if (payload === "We are done!! Thanks!!") {
-        setTimeout(function() {
-          self.hide(5000, function() {
-            Log.log(self.name + ' is hidden.');
-          })
-        }, 5000);
+      this.image = null;
+    } else if (notification === 'WELCOME') {
+      this.message = "";
+    } else if (notification === 'BYE') {
+      var callback = function() {
+        self.message = "Goodbye! Next test is in 3 month.";
+        self.image = null;
+        self.updateDom();
       }
+      setTimeout(callback, 3000);
+      setTimeout(function() {
+        self.message = "";
+        self.updateDom();
+      }, 6000);
     }
     this.updateDom();
   },
 
   notificationReceived: function(notification, payload, sender) {
-
+    var self = this;
     if (notification === "CHECK_MY_SKIN"){
-      this.getMoleTestResult();
+      self.show(function() {
+        Log.log(self.name + ' is shown.');
+      });
+      self.image = null;
+      self.message = "Please stand still while taking the test.";
+      self.display = true;
+      this.updateDom();
+      this.sendSocketNotification('START_TEST', this.config);
+    } else if (notification === "YES") {
+      self.message = "Your skin test has been send to your doctor.";
+      this.updateDom();
+
+      this.sendSocketNotification('BYE', this.config);
+    } else if (notification === "NO") {
+      this.sendSocketNotification('BYE', this.config);
     }
   },
 

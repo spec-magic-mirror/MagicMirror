@@ -37,17 +37,17 @@ var config = {
 				]
 			}
 		},
-		{
-			module: "weatherforecast",
-			position: "top_right",	// This can be any of the regions.
-			header: 'Weather Forecast',		// Best results in left or right regions.
-			config: {
-				// See 'Configuration options' for more information.
-				location: "New York",
-				locationID: "5128581", //Location ID from http://openweathermap.org/help/city_list.txt
-				appid: "" //openweathermap.org API key.
-			}
-		},
+		// {
+		// 	module: "weatherforecast",
+		// 	position: "top_right",	// This can be any of the regions.
+		// 	header: 'Weather Forecast',		// Best results in left or right regions.
+		// 	config: {
+		// 		// See 'Configuration options' for more information.
+		// 		location: "New York",
+		// 		locationID: "5128581", //Location ID from http://openweathermap.org/help/city_list.txt
+		// 		appid: "" //openweathermap.org API key.
+		// 	}
+		// },
 		// {
 		// 	module: 'compliments',
 		// 	position: 'lower_third'
@@ -70,11 +70,11 @@ var config = {
 			module: 'MMM-Mole',
 			position: "top_center",
 			config: {
-				text: "Hello to Magic Mole Monitor!",
-				message: "Please stand still for skin test.",
+				text: "Welcome to Reflective Health!",
+				message: "",
 				// use pi camera by default; set it to false for laptop camera
-				usePiCam: false,
-				display: false
+				usePiCam: false
+				//display: true
 	    	}
 		},
 		// {
@@ -111,23 +111,23 @@ var config = {
 	       config: {
 		      models: [
 			     {
-				    keyword: "Show Camera",
-				    description: "Say 'Show Camera' to start breathing test.",
-				    file: "showCamera.pmdl",
-				    message: "SHOW_CAMERA"
-			     },
-			     {
-				    keyword: "Hide Camera",
-				    description: "Say 'Hide Camera' to end breathing test",
-				    file: "hideCamera.pmdl",
-				    message: "HIDE_CAMERA"
-			     },
-			     {
 			     	keyword: "Check My Skin",
                     description: "Say 'Check My Skin' to start your skin test",
                     file: "checkMySkin.pmdl",
                     message: "CHECK_MY_SKIN"
 			     },
+			     {
+					keyword: "Yes",
+                    description: "Say 'Yes' to send your skin test",
+                    file: "YES.pmdl",
+                    message: "YES"
+			     },
+			     {
+			     	keyword: "No",
+                    description: "Say 'No' to finish your skin test",
+                    file: "NO.pmdl",
+                    message: "NO"
+			     }
 		      ]
 	       }
         },

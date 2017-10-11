@@ -59,22 +59,24 @@ to_node('camera_ready', True)
 time.sleep(2)
 
 retval, img = cap.read()
+cv2.imwrite(log_path + datetime.now().isoformat("T") + '.png', img)
+
 try:
   img, buf = cv2.imencode(".jpg", img)
 except:
   to_node('error', sys.exc_info()[0])
-finally:
-  to_node('success', True)
-
-
+  
 # When everything done, release the capture
 cap.release()
 # vs.stop()
 cv2.destroyAllWindows()
 responses = requests.post("http://localhost:5000/detect_moles", files={"Front": base64.b64encode(buf)})
-cv2.imwrite(log_path + datetime.now().isoformat("T") + '.jpg', buf)
 
 to_node('backend', responses.json().get('Front'))
+
+time.sleep(5)
+# to_node('success', True)
+# time.sleep(5)
 
 
 
