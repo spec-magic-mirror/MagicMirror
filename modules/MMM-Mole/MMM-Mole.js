@@ -47,6 +47,7 @@ Module.register("MMM-Mole", {
     } else if (notification === 'BYE') {
       var callback = function() {
         self.message = "Goodbye! Next test is in 3 month.";
+        self.image = null;
         self.updateDom();
       }
       setTimeout(callback, 3000);

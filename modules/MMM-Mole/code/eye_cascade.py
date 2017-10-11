@@ -75,8 +75,8 @@ responses = requests.post("http://localhost:5000/detect_moles", files={"Front": 
 to_node('backend', responses.json().get('Front'))
 
 time.sleep(5)
-to_node('success', True)
-time.sleep(5)
+# to_node('success', True)
+# time.sleep(5)
 
 
 
