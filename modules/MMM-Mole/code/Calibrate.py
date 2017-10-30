@@ -3,6 +3,8 @@ import cv2
 import dlib
 from skimage import io
 from sets import Set
+import os
+import inspect
 '''
 The mouth can be accessed through points [48, 68].
 The right eyebrow through points [17, 22].
@@ -120,39 +122,49 @@ def match(distances1, distances2, ratio):
 
 	return mole_pairs
 	
-moles1 = [(608, 508), (652, 568), (806, 517)]
-moles2 = [(565, 498), (605, 557), (756, 508)]
-detector = dlib.get_frontal_face_detector()
-predictor = dlib.shape_predictor("./shape_predictor_68_face_landmarks.dat")
-image1 = cv2.imread("./../log/test1.png")
-gray1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
-image2 = cv2.imread("./../log/test2.png")
-gray2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
-shape1 = get_landmarks(gray1)
-shape2 = get_landmarks(gray2)
-distances1 = get_distance(shape1, moles1)
-distances2 = get_distance(shape2, moles2)
+# moles1 = [(608, 508), (652, 568), (806, 517)]
+# moles2 = [(565, 498), (605, 557), (756, 508)]
+# detector = dlib.get_frontal_face_detector()
+# predictor = dlib.shape_predictor("./shape_predictor_68_face_landmarks.dat")
+image1 = cv2.imread("./../log/test3.png")
+# gray1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
+# image2 = cv2.imread("./../log/test2.png")
+# gray2 = cv2.cvtColor(image2, cv2.COLOR_BGR2GRAY)
+# shape1 = get_landmarks(gray1)
+# shape2 = get_landmarks(gray2)
+# distances1 = get_distance(shape1, moles1)
+# distances2 = get_distance(shape2, moles2)
 
-land_mark_dist1 = np.sqrt((shape1[40][0] - shape1[43][0])**2 + (shape1[40][1] - shape1[43][1])**2)
-land_mark_dist2 = np.sqrt((shape2[40][0] - shape2[43][0])**2 + (shape2[40][1] - shape2[43][1])**2)
-print("here: ")
-print(land_mark_dist1, land_mark_dist2)
-ratio = land_mark_dist1 / land_mark_dist2
+# land_mark_dist1 = np.sqrt((shape1[40][0] - shape1[43][0])**2 + (shape1[40][1] - shape1[43][1])**2)
+# land_mark_dist2 = np.sqrt((shape2[40][0] - shape2[43][0])**2 + (shape2[40][1] - shape2[43][1])**2)
+# print("here: ")
+# print(land_mark_dist1, land_mark_dist2)
+# ratio = land_mark_dist1 / land_mark_dist2
 
-mole_pairs = match(distances1, distances2, ratio)
-print(mole_pairs)
-color = 255
-for m1, m2 in mole_pairs.iteritems():
-	cv2.circle(image1, (m1[0], m1[1]), 1, (0, 0, color), -1)
-	cv2.circle(image2, (m2[0], m2[1]), 1, (0, 0, color), -1)
-	color -= 85
-cv2.imshow("Output1", image1)
-cv2.imwrite('output1.png', image1)
-cv2.imshow("Output2", image2)
-cv2.imwrite('output2.png', image2)
+# mole_pairs = match(distances1, distances2, ratio)
+# print(mole_pairs)
+# color = 255
+# for m1, m2 in mole_pairs.iteritems():
+# 	cv2.circle(image1, (m1[0], m1[1]), 1, (0, 0, color), -1)
+# 	cv2.circle(image2, (m2[0], m2[1]), 1, (0, 0, color), -1)
+# 	color -= 85
+# cv2.imshow("Output1", image1)
+# cv2.imwrite('output1.png', image1)
+# cv2.imshow("Output2", image2)
+# cv2.imwrite('output2.png', image2)
 
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+path_to_file = os.path.dirname(os.path.abspath(
+    inspect.getfile(inspect.currentframe())))
+facePath = path_to_file + '/haarcascade_frontalface_default.xml'
+
+face_cascade = cv2.CascadeClassifier(facePath)
+faces = face_cascade.detectMultiScale(image1, 1.3, 5)
+for (x,y,w,h) in faces:
+	crop = image1[y - 50: y + h + 50, x - 50: x + w + 50]
+	cv2.imshow("Output1", crop)
+
+	cv2.waitKey(0)
+	cv2.destroyAllWindows()
 
 
 
