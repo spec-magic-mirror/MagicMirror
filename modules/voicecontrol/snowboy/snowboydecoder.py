@@ -8,6 +8,7 @@ import wave
 import os
 import logging
 
+
 logging.basicConfig()
 logger = logging.getLogger("snowboy")
 logger.setLevel(logging.INFO)

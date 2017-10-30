@@ -18,9 +18,9 @@ CONFIG = json.loads(sys.argv[1])
 path_to_file = os.path.dirname(os.path.abspath(
     inspect.getfile(inspect.currentframe())))
 facePath = path_to_file + '/haarcascade_frontalface_default.xml'
-eyePath = path_to_file + '/haarcascade_eye.xml'
-faceCascade = cv2.CascadeClassifier(facePath)
-eyeCascade = cv2.CascadeClassifier(eyePath)
+
+face_cascade = cv2.CascadeClassifier(facePath)
+
 
 log_path = path_to_file + '/../log/'
 if not os.path.exists(log_path):
@@ -37,7 +37,6 @@ def to_node(type, message):
   # stdout has to be flushed manually to prevent delays in the node helper
   # communication
   sys.stdout.flush()
-
 
 # *************************************************************
 # Main function
@@ -59,15 +58,43 @@ to_node('camera_ready', True)
 time.sleep(2)
 
 retval, img = cap.read()
-cv2.imwrite(log_path + datetime.now().isoformat("T") + '.png', img)
+cap.release()
 
 try:
-  img, buf = cv2.imencode(".jpg", img)
+  gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 except:
   to_node('error', sys.exc_info()[0])
-  
-# When everything done, release the capture
-cap.release()
+
+
+filename = log_path + datetime.now().isoformat("T")
+
+cv2.imwrite(filename + '.png', img)
+
+
+
+
+# image = cv2.imread(filename)
+
+
+faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1,minNeighbors=8,minSize=(55, 55),flags=cv2.CASCADE_SCALE_IMAGE)
+
+if len(faces) == 0:
+  to_node('error', sys.exc_info()[0])
+
+for (x,y,w,h) in faces:
+  crop = img[y - 25: y + h + 25, x: x + w]
+  # cv2.imwrite(log_path + "crop.png", crop)
+  cv2.imwrite(filename + '_crop.png', crop)
+
+
+
+try:
+  img, buf = cv2.imencode(".jpg", crop)
+except:
+  to_node('error', sys.exc_info()[0])
+
+
+
 # vs.stop()
 cv2.destroyAllWindows()
 responses = requests.post("http://localhost:5000/detect_moles", files={"Front": base64.b64encode(buf)})

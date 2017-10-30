@@ -29,7 +29,7 @@ Module.register("MMM-Mole", {
   getMoleTestResult: function() {
     var self = this;    
     this.pythonStarted = false;
-    this.sendSocketNotification('WELCOME', this.config);
+    this.sendSocketNotification('START_TEST', this.config);
   },
 
   socketNotificationReceived: function(notification, payload) {

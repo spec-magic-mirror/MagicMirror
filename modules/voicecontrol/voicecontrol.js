@@ -16,7 +16,7 @@ Module.register("voicecontrol", {
                     {
                         keyword: "Check My Skin",
                         description: "Say 'Check My Skin' to start your skin test",
-                        file: "checkMySkin.pmdl",
+                        file: "alexa.umdl",
                         message: "CHECK_MY_SKIN"
                     },
                     {
