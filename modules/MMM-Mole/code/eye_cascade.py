@@ -11,21 +11,34 @@ import inspect
 import requests
 import base64
 
+usingPi = True
+
+try:
+  from picamera import PiCamera
+except Exception as e:
+  usingPi = False
+
+
 # Configuration from MMM
 CONFIG = json.loads(sys.argv[1])
-
-# Computer vision lib files needed by OpenCV
 path_to_file = os.path.dirname(os.path.abspath(
     inspect.getfile(inspect.currentframe())))
-facePath = path_to_file + '/haarcascade_frontalface_default.xml'
+if usingPi:
+  camera = PiCamera(sensor_mode = 2)
+  camera.resolution = "3280 * 2464"
+  camera.rotation = 180
+  camera.exposure_compensation = 8
+  camera.exposure_mode = 'night'
+  camera.video_stabilization = True
+else: 
+  cap = cv2.VideoCapture(0)
 
-face_cascade = cv2.CascadeClassifier(facePath)
 
 
 log_path = path_to_file + '/../log/'
 if not os.path.exists(log_path):
   os.makedirs(log_path)
-
+filename = log_path + datetime.now().isoformat("T")
 
 def to_node(type, message):
   # Send message to MMM
@@ -38,18 +51,6 @@ def to_node(type, message):
   # communication
   sys.stdout.flush()
 
-# *************************************************************
-# Main function
-# *************************************************************
-
-# Start video stream
-# vs = VideoStream(usePiCamera=CONFIG['usePiCam']).start()
-cap = cv2.VideoCapture(0)
-
-# cap.set(CV_CAP_PROP_FRAME_WIDTH,640);
-# cap.set(CV_CAP_PROP_FRAME_HEIGHT,480);
-
-
 # allow the camera sensor to warmup
 time.sleep(2)
 
@@ -57,53 +58,28 @@ to_node('camera_ready', True)
 
 time.sleep(2)
 
-retval, img = cap.read()
-cap.release()
-
-try:
-  gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-except:
-  to_node('error', sys.exc_info()[0])
-
-
-filename = log_path + datetime.now().isoformat("T")
-
-cv2.imwrite(filename + '.png', img)
-
-
-
-
-# image = cv2.imread(filename)
-
-
-faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1,minNeighbors=8,minSize=(55, 55),flags=cv2.CASCADE_SCALE_IMAGE)
-
-if len(faces) == 0:
-  to_node('error', sys.exc_info()[0])
-
-for (x,y,w,h) in faces:
-  crop = img[y - 25: y + h + 25, x: x + w]
-  # cv2.imwrite(log_path + "crop.png", crop)
-  cv2.imwrite(filename + '_crop.png', crop)
-
+if usingPi:
+  camera.capture(filename + '.png')
+else:
+  retval, img = cap.read()
+  cap.release()
 
 
 try:
-  img, buf = cv2.imencode(".jpg", crop)
+  img, buf = cv2.imencode(".jpg", img)
 except:
   to_node('error', sys.exc_info()[0])
 
-
-
-# vs.stop()
 cv2.destroyAllWindows()
-responses = requests.post("http://localhost:5000/detect_moles", files={"Front": base64.b64encode(buf)})
+
+
+url = "http://" + CONFIG["middleware_addr"] + "/detect_moles"
+responses = requests.post(url, files={"Front": base64.b64encode(buf)})
 
 to_node('backend', responses.json().get('Front'))
 
 time.sleep(5)
-# to_node('success', True)
-# time.sleep(5)
+
 
 
 

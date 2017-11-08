@@ -17,10 +17,6 @@ var config = {
 			module: 'alert',
 		},
 		{
-			module: "updatenotification",
-			position: "top_bar"
-		},
-		{
 			module: 'clock',
 			position: 'top_left'
 		},
@@ -75,7 +71,8 @@ var config = {
 				// use pi camera by default; set it to false for laptop camera
 				usePiCam: false,
 				display: true,
-				testInProgress: false
+				testInProgress: false,
+				middleware_addr: "10.148.128.100:5000"
 	    	}
 		},
 		// {
