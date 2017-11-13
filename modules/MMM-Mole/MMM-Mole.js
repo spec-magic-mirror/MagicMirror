@@ -97,8 +97,8 @@ Module.register("MMM-Mole", {
       if (this.image != null) {
         var imageTab = document.createElement('img');
         imageTab.setAttribute('src', this.image);
-        imageTab.setAttribute('height', '100%');
-        imageTab.setAttribute('width', '100%');
+        imageTab.setAttribute('height', '50%');
+        imageTab.setAttribute('width', '50%');
         wrapper.appendChild(imageTab);
       } 
     }

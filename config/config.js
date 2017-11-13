@@ -44,25 +44,7 @@ var config = {
 		// 		appid: "" //openweathermap.org API key.
 		// 	}
 		// },
-		// {
-		// 	module: 'compliments',
-		// 	position: 'lower_third'
-		// },
-		// {
-		// 	 module: 'MMM-Smile',
-		// 	 position: "middle_center",
-		// 	 config: {
-		// 		// recognition interval in ms, default to 8 hours
- 	//          	interval: 8 * 60 * 60 * 1000,
-	 //         	// total test running time in seconds
-		// 	 	testRunTime: 120,
-		//      	// the smiling period in seconds in order to pass the test
-		// 	    smileLength: 5,
-		// 		// use pi camera by default; set it to false for laptop camera
-		// 		usePiCam: false
-		//     }
-		// },
-		{
+	  	{
 			module: 'MMM-Mole',
 			position: "top_center",
 			config: {
@@ -72,8 +54,9 @@ var config = {
 				usePiCam: false,
 				display: true,
 				testInProgress: false,
-				middleware_addr: "10.148.128.100:5000"
-	    	}
+				middleware_addr: "middleware.ddns.net:5000"
+				//middleware_addr: "10.148.128.100:5000"
+	    		}
 		},
 		// {
 		// 	module: 'newsfeed',
@@ -89,24 +72,11 @@ var config = {
 		// 		showPublishDate: true
 		// 	}
 		// },
-		// {
-  //           module: 'camera',
-  //           position: 'top_center',
-  //           config: {
-  //                       selfieInterval: 3,  // Time interval (s) before the photo will be taken.
-  //                       emailConfig: {
-  //                           service: 'Yahoo', // Email provider to use to send email with a photo.
-  //                           auth: {
-  //                               user: '', // Your email account
-  //                               pass: ''        // Your password for email account
-  //                           }
-  //                       }
-  //                   }
-  //       },
-        {
-	       module: 'voicecontrol',
-	       position: 'top_right',
-	       config: {
+/*
+	        {
+	       	module: 'voicecontrol',
+	       	position: 'top_right',
+	       	config: {
 		      models: [
 			     {
 			     	keyword: "Check My Skin",
@@ -129,6 +99,7 @@ var config = {
 		      ]
 	       }
         },
+*/
 	]
 
 };

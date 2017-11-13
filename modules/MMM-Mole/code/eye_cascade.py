@@ -11,34 +11,12 @@ import inspect
 import requests
 import base64
 
-usingPi = True
+def dbg(msg):
+  with open("/home/pi/workspace/tmp/eye_cascade_log.txt","a+") as f:
+    time_str = str(datetime.now())
+    f.write(time_str + ": " + msg + "\n")	
 
-try:
-  from picamera import PiCamera
-except Exception as e:
-  usingPi = False
-
-
-# Configuration from MMM
-CONFIG = json.loads(sys.argv[1])
-path_to_file = os.path.dirname(os.path.abspath(
-    inspect.getfile(inspect.currentframe())))
-if usingPi:
-  camera = PiCamera(sensor_mode = 2)
-  camera.resolution = "3280 * 2464"
-  camera.rotation = 180
-  camera.exposure_compensation = 8
-  camera.exposure_mode = 'night'
-  camera.video_stabilization = True
-else: 
-  cap = cv2.VideoCapture(0)
-
-
-
-log_path = path_to_file + '/../log/'
-if not os.path.exists(log_path):
-  os.makedirs(log_path)
-filename = log_path + datetime.now().isoformat("T")
+dbg("START")
 
 def to_node(type, message):
   # Send message to MMM
@@ -51,20 +29,53 @@ def to_node(type, message):
   # communication
   sys.stdout.flush()
 
+usingPi = True
+
+try:
+  from picamera import PiCamera
+except Exception as e:
+  usingPi = False
+
+# Configuration from MMM
+CONFIG = json.loads(sys.argv[1])
+path_to_file = os.path.dirname(os.path.abspath(
+    inspect.getfile(inspect.currentframe())))
+if usingPi:
+  camera = PiCamera(sensor_mode = 2)
+  camera.resolution = (3280, 2464)
+  camera.rotation = 180
+  camera.exposure_compensation = 8
+  camera.exposure_mode = 'night'
+  camera.video_stabilization = True
+else: 
+  cap = cv2.VideoCapture(0)
+
+dbg("CREATED CAMERA")
+
+log_path = path_to_file + '/../log/'
+if not os.path.exists(log_path):
+  os.makedirs(log_path)
+filename = log_path + datetime.now().isoformat("T")
+
+dbg("CAMERA WARMING UP")
 # allow the camera sensor to warmup
 time.sleep(2)
 
+dbg("SENDING MESSAGE TO FRONT")
 to_node('camera_ready', True)
 
-time.sleep(2)
-
+dbg("CAPTURING")
 if usingPi:
-  camera.capture(filename + '.png')
+  camera.capture(filename + '.jpg')
+  dbg("IMAGE CAPTURED, READING FROM FILE")
+  img = cv2.imread(filename + ".jpg")
 else:
   retval, img = cap.read()
   cap.release()
+dbg("DONE CAPTURING")
 
-
+buf = None
+dbg("ENCODING")
 try:
   img, buf = cv2.imencode(".jpg", img)
 except:
@@ -72,13 +83,14 @@ except:
 
 cv2.destroyAllWindows()
 
-
+dbg("RETURN RESPONSE TO MIDDLE")
 url = "http://" + CONFIG["middleware_addr"] + "/detect_moles"
 responses = requests.post(url, files={"Front": base64.b64encode(buf)})
 
+dbg("RETURN RESPONSE TO FRONT")
 to_node('backend', responses.json().get('Front'))
 
-time.sleep(5)
+#time.sleep(5)
 
 
 
