@@ -14,6 +14,8 @@ module.exports = NodeHelper.create({
       if (message.hasOwnProperty('camera_ready')) {
         console.log("[" + self.name + "] " + 'camera ready')
         self.sendMessage("Ready to take pictures");
+      } else if (message.hasOwnProperty('image_captured')) {
+	self.sendMessage("Picture taken, analysing...");
       } else if (message.hasOwnProperty('success')) {
         console.log("[" + self.name + "] " + (message.success));
         self.sendSocketNotification('FINISH', 'We are done!! Thanks!!');

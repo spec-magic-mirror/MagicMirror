@@ -73,7 +73,7 @@ else:
   retval, img = cap.read()
   cap.release()
 dbg("DONE CAPTURING")
-
+to_node('image_captured', True)
 buf = None
 dbg("ENCODING")
 try:
