@@ -100,6 +100,17 @@ var config = {
 	       }
         },
 */
+		{
+			"module": "MMM-awesome-alexa",
+			"position": "bottom_bar",
+			"config": {
+				"wakeWord": "Alexa",
+				"clientId": "amzn1.application-oa2-client.64b783a057104700b89a37b5f5a2dc11",
+				"clientSecret": "48cca45c1a41d900da8a1c72d031e1add961e73a4fd881405630eac4dd54796a",
+				"deviceId": "ReflectiveHealth",
+				"refreshToken": "Atzr|IwEBIP8nNg7OBYYK8APWrVTlqvRTKLZTM9ciH88Ngpzr51lbLnvxVyxTkPtFin7tsq2NuRjwAt_yzPBhffSFQfREIOcQclraBlq-sirq77xCPcCWR9UtxQ17i1uF-kfLZL2gbUZmMmJ3fXs_ONy_7OdqG1C11Nid8_aUWIiORrNS70fGEL3yg4t9s-TFOpSJ3tkRV8uDMSx7RIQJ4OgLp46uNffZRKYsKXPezP1wAxleGG_hpXR31OcdgwyAfraj4cs4LlQxUZHs91K-ZlLX_-erB9ffx4pLyarRJE0Dh4XTrFj41w1_ShqJvwn0DO2NE4zFMX3JJxaiVRcTQ1Qd1H1IGoogrH-jJjIf98vbVP2htBHB_ovlg-TLudNtSlcjTT88smXVksJSoL97PirlQfo7Ux_N9dpPeV_LDAsR8-7lHxaKhNSnS60TLMeEwwhGxatHYCr7rPbhBkeEZFObv74D7gUa6kK6vgjzz0Ec0NGg6OudFNvUKXr5m2NlD9F_lFxDJtbzBwuQ3fklBDomsBYfEOY6"
+			}
+		}
 	]
 
 };
