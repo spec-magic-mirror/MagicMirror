@@ -47,7 +47,7 @@ Module.register("MMM-Mole", {
       this.message = "";
     } else if (notification === 'BYE') {
       var callback = function() {
-        self.message = "Goodbye! Next test is in 3 month.";
+        self.message = "Great job. See you in a month!";
         this.testInProgress = false;
         self.image = null;
         self.updateDom();
@@ -64,15 +64,16 @@ Module.register("MMM-Mole", {
   notificationReceived: function(notification, payload, sender) {
     var self = this;
     if (notification === "CHECK_MY_SKIN"){
-      self.show(function() {
-        Log.log(self.name + ' is shown.');
-      });
-      self.image = null;
-      self.message = "Please stand still while taking the test.";
-      self.display = true;
-      self.testInProgress = true;
-      this.updateDom();
-      this.sendSocketNotification('START_TEST', this.config);
+      this.sendSocketNotification('BYE', this.config);
+      // self.show(function() {
+      //   Log.log(self.name + ' is shown.');
+      // });
+      // self.image = null;
+      // self.message = "Please stand still while taking the test.";
+      // self.display = true;
+      // self.testInProgress = true;
+      // this.updateDom();
+      // this.sendSocketNotification('START_TEST', this.config);
     } else if (notification === "YES" && self.testInProgress) {
       self.message = "Your skin test has been send to your doctor.";
       this.updateDom();
