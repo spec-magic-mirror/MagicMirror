@@ -15,7 +15,7 @@ module.exports = NodeHelper.create({
         console.log("[" + self.name + "] " + 'camera ready')
         self.sendMessage("Ready to take pictures");
       } else if (message.hasOwnProperty('image_captured')) {
-	self.sendMessage("Picture taken, analysing...");
+	      self.sendMessage("Picture taken, analysing...");
       } else if (message.hasOwnProperty('success')) {
         console.log("[" + self.name + "] " + (message.success));
         self.sendSocketNotification('FINISH', 'We are done!! Thanks!!');
@@ -40,7 +40,8 @@ module.exports = NodeHelper.create({
         }, 30 * 1000);
       } else {
         console.log("[" + self.name + "] " + 'finished running...');
-        self.sendMessage('Your next appointment is not for 6 months would you like to send this report to your doctor?');
+        self.sendSocketNotification('BYE', "Goodbye");
+        // self.sendMessage('Your next appointment is not for 6 months would you like to send this report to your doctor?');
       }
     });
   },
@@ -50,7 +51,7 @@ module.exports = NodeHelper.create({
   },
   socketNotificationReceived: function(notification, payload) {
     if (notification === 'START_TEST') {
-      this.config = payload
+      this.config = payload;
       this.python_start();
     } else if (notification === 'PASSED_TEST') {
       this.sendSocketNotification('MESSAGE', "PASSED_TEST");
